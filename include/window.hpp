@@ -11,10 +11,13 @@ public:
 
     void main_looping();
 
+    void draw();
+
 private:
     int width, height;
     sf::RenderWindow win;
 
     void allEvents();
 
+    void draw_pieces();
 };
