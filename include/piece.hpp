@@ -8,7 +8,7 @@
 class Piece{
 public:
     Piece();
-    std::string PieceType[32] = {
+    const std::string PieceType[32] = {
         "DTOWER1",
         "DHORSE1",
         "DBISHOP1",
@@ -44,28 +44,8 @@ public:
     };
     std::vector<std::vector<std::string>> board;
 
-    void move_piece(std::string name, int pos,
-    int8_t color);
+    void move_piece(int pos_iX, int pos_iY, int pos_fX, int pos_fY);
 
-    bool check_move(std::string name, int pos,
-    int8_t color);
+    bool check_move(int pos_iX, int pos_iY, int pos_fX, int pos_fY);
 
 };
-
-Piece::Piece(){
-    board = std::vector<std::vector<std::string>>(8, std::vector<std::string>(8));
-    for(int i = 0; i < 16; i++) {
-        if(i < 8) {
-            board[0][i] = PieceType[i+16];
-        } else {
-            board[1][i-8] = PieceType[i+16];
-        }
-    }
-    for(int i = 0; i < 16; i++) {
-        if(i < 8) {
-            board[7][i] = PieceType[i];
-        } else {
-            board[7][i-8] = PieceType[i];  
-        }
-    }
-}

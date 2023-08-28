@@ -1,22 +1,17 @@
 #include "window.hpp"
-#include "piece.hpp"
-#include <iostream>
 
 Window::~Window(){
 
 }
 
 void Window::draw_pieces(){
-
     sf::Texture text_sprites;
-    if(!text_sprites.loadFromFile("../pcqrGKzLi.png")){
+    if(!text_sprites.loadFromFile("../PiecesSprite.png")){
         return ;
     }
 
-    int spriteWidth = 334;
-    int spriteHeight = 333;
-    int numRows = 2;
-    int numCols = 8;
+    const int spriteWidth = 334, spriteHeight = 333;
+    const int numRows = 2, numCols = 8;
 
     std::vector<sf::Sprite> sprites;
         for (int row = 0; row < numRows; row++) {
@@ -29,11 +24,11 @@ void Window::draw_pieces(){
         }
     }
 
-    Piece pieces;
     for (int row = 0; row < 8; row++) {
         for (int column = 0; column < 8; column++) {
             auto true_piece = pieces.board[row][column];
             char aux = true_piece[0];
+
             if(true_piece=="LTOWER1" || true_piece=="LTOWER2"){
                 auto PIECE = sprites[4];
                 PIECE.setPosition(180+column*56, 40+(-row+7)*56);
@@ -64,38 +59,38 @@ void Window::draw_pieces(){
                 PIECE.setPosition(180+column*56, 40+(-row+7)*56);
                 win.draw(PIECE);
             }
-            if(true_piece=="RTOWER1" || true_piece=="RTOWER2"){
-                auto PIECE = sprites[10];
-                PIECE.setPosition(180+column*56, 40+(row)*56);
+            else if(true_piece=="DTOWER1" || true_piece=="DTOWER2"){
+                auto PIECE = sprites[12];
+                PIECE.setPosition(180+column*56, 40+(7-row)*56);
                 win.draw(PIECE);
             }
-            else if(true_piece=="RHORSE1"||true_piece=="RHORSE2"){
-                auto PIECE = sprites[9];
-                PIECE.setPosition(180+column*56, 40+(row)*56);
-                win.draw(PIECE);
-            }
-            else if(true_piece=="RBISHOP1"||true_piece=="RBISHOP2"){
-                auto PIECE = sprites[8];
-                PIECE.setPosition(180+column*56, 40+(row)*56);
-                win.draw(PIECE);
-            }
-            else if(true_piece=="RLADY"){
-                auto PIECE = sprites[7];
-                PIECE.setPosition(180+column*56, 40+(row)*56);
-                win.draw(PIECE);
-            }
-            else if(true_piece=="RKING"){
-                auto PIECE = sprites[6];
-                PIECE.setPosition(180+column*56, 40+(row)*56);
-                win.draw(PIECE);
-            }
-            else if(aux == 'R'){
+            else if(true_piece=="DHORSE1"||true_piece=="DHORSE2"){
                 auto PIECE = sprites[11];
-                PIECE.setPosition(180+column*56, 40+(row)*56);
+                PIECE.setPosition(180+column*56, 40+(7-row)*56);
                 win.draw(PIECE);
+            }
+            else if(true_piece=="DBISHOP1"||true_piece=="DBISHOP2"){
+                auto PIECE = sprites[10];
+                PIECE.setPosition(180+column*56, 40+(7-row)*56);
+                win.draw(PIECE);
+            }
+            else if(true_piece=="DLADY"){
+                auto PIECE = sprites[9];
+                PIECE.setPosition(180+column*56, 40+(7-row)*56);
+                win.draw(PIECE);
+            }
+            else if(true_piece=="DKING"){
+                auto PIECE = sprites[8];
+                PIECE.setPosition(180+column*56, 40+(7-row)*56);
+                win.draw(PIECE);
+            }
+            else if(aux == 'D'){
+                auto PIECE = sprites[13];
+                PIECE.setPosition(180+column*56, 40+(7-row)*56);
+                win.draw(PIECE);
+                }
             }
         }
-    }
 }
 
 void Window::draw(){
@@ -105,7 +100,7 @@ void Window::draw(){
     tab.setFillColor(sf::Color::Transparent);
     tab.setOutlineColor(sf::Color::Red);
     tab.setOutlineThickness(5.0f);
-    tab.setPosition(180.0f, 40.0f);
+    tab.setPosition(TAB_X, TAB_Y);
 
     win.draw(tab);
 
@@ -115,12 +110,12 @@ void Window::draw(){
         for (int col = 0; col < 8; col++) {
             sf::RectangleShape cell(sf::Vector2f(cellSize, cellSize));
 
-            cell.setPosition(180.0f + col * cellSize, 40.0f + row * cellSize);
+            cell.setPosition(TAB_X + col * cellSize, TAB_Y + row * cellSize);
 
             if ((row + col) % 2 == 0) {
-                cell.setFillColor(sf::Color::White);
+                cell.setFillColor(sf::Color::Green);
             } else {
-                cell.setFillColor(sf::Color::Black);
+                cell.setFillColor(sf::Color::Blue);
             }
 
             win.draw(cell);
@@ -135,8 +130,24 @@ void Window::allEvents(){
         if(event.type == sf::Event::Closed){
             win.close();
         }
+        else if (event.type == sf::Event::MouseButtonPressed) {
+            if (event.mouseButton.button == sf::Mouse::Left) {
+                sf::Vector2i mousePosition = sf::Mouse::getPosition(win);
+                sf::Vector2f worldMousePosition = win.mapPixelToCoords(mousePosition);
+                
+                int column = (worldMousePosition.x - TAB_X) / 56;
+                int row = 8 - (worldMousePosition.y - TAB_Y) / 56;
+
+                if (row >= 0 && row < 8 && column >= 0 && column < 8) {
+                    pieces.move_piece(row, column, 2, 2);
+                }
+            }
+        }
+
+
     }
 }
+
 void Window::main_looping(){
     while(win.isOpen()){
         this->allEvents();

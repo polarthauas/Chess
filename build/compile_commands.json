@@ -1,0 +1,17 @@
+[
+{
+  "directory": "/home/polar/Documentos/c++/Chess/build",
+  "command": "/usr/bin/clang++-14  -I/home/polar/Documentos/c++/Chess/include -g -std=gnu++11 -o CMakeFiles/Chess.dir/src/main.cpp.o -c /home/polar/Documentos/c++/Chess/src/main.cpp",
+  "file": "/home/polar/Documentos/c++/Chess/src/main.cpp"
+},
+{
+  "directory": "/home/polar/Documentos/c++/Chess/build",
+  "command": "/usr/bin/clang++-14  -I/home/polar/Documentos/c++/Chess/include -g -std=gnu++11 -o CMakeFiles/Chess.dir/src/window.cpp.o -c /home/polar/Documentos/c++/Chess/src/window.cpp",
+  "file": "/home/polar/Documentos/c++/Chess/src/window.cpp"
+},
+{
+  "directory": "/home/polar/Documentos/c++/Chess/build",
+  "command": "/usr/bin/clang++-14  -I/home/polar/Documentos/c++/Chess/include -g -std=gnu++11 -o CMakeFiles/Chess.dir/src/piece.cpp.o -c /home/polar/Documentos/c++/Chess/src/piece.cpp",
+  "file": "/home/polar/Documentos/c++/Chess/src/piece.cpp"
+}
+]
