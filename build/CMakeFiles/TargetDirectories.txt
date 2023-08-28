@@ -1,3 +1,0 @@
-/home/polar/Documentos/c++/Chess/build/CMakeFiles/Chess.dir
-/home/polar/Documentos/c++/Chess/build/CMakeFiles/edit_cache.dir
-/home/polar/Documentos/c++/Chess/build/CMakeFiles/rebuild_cache.dir
