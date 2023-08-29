@@ -2,7 +2,6 @@
 
 #include <map>
 #include <string>
-#include <iostream>
 #include <vector>
 
 class Piece{
@@ -46,6 +45,11 @@ public:
 
     void move_piece(int pos_iX, int pos_iY, int pos_fX, int pos_fY);
 
+    std::vector<std::vector<int>> check_possibles(int pos_x, int pos_y);
+
     bool check_move(int pos_iX, int pos_iY, int pos_fX, int pos_fY);
 
+    bool DROOK, LROOK;
+
+    char move = 'L';
 };

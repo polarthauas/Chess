@@ -1,4 +1,5 @@
 #include "window.hpp"
+#include <iostream>
 
 Window::~Window(){
 
@@ -103,8 +104,7 @@ void Window::draw(){
     tab.setPosition(TAB_X, TAB_Y);
 
     win.draw(tab);
-
-    float cellSize = 448.0f / 8;
+    const float cellSize = 448.0f / 8;
 
     for (int row = 0; row < 8; row++) {
         for (int col = 0; col < 8; col++) {
@@ -122,6 +122,35 @@ void Window::draw(){
         }
     }
     this->draw_pieces();
+
+    if (selected_piece[0] != "" && selected_piece[1]!="" && selected_piece[2]!="") {
+        possibles =pieces.check_possibles(std::stoi(selected_piece[1]), std::stoi(selected_piece[2]));
+        for (int i = 0; i < possibles.size(); i++) {
+            sf::CircleShape circle(15);
+            circle.setFillColor(sf::Color(123, 116, 117));
+            circle.setPosition(possibles[i][0] * 56 + 193, (7 - possibles[i][1]) * 56 + 50);
+            win.draw(circle);
+        }
+    }
+
+    sf::Font TextFont;
+
+    if(!TextFont.loadFromFile("../Open_Sans/OpenSans-Italic-VariableFont_wdth,wght.ttf")){
+        return ;
+    }
+    sf::Text clock;
+    double actual_time = gameTimer.elapsed();
+    clock.setFont(TextFont);
+    clock.setPosition(640, 240);
+    clock.setLetterSpacing(1);
+    if(actual_time <= 0){
+        clock.setString("Time out");
+    }
+    else{
+        clock.setString(std::to_string(actual_time));
+    }
+    clock.setFillColor(sf::Color::White);
+    win.draw(clock);
 }
 
 void Window::allEvents(){
@@ -132,29 +161,48 @@ void Window::allEvents(){
         }
         else if (event.type == sf::Event::MouseButtonPressed) {
             if (event.mouseButton.button == sf::Mouse::Left) {
-                sf::Vector2i mousePosition = sf::Mouse::getPosition(win);
-                sf::Vector2f worldMousePosition = win.mapPixelToCoords(mousePosition);
+                auto mousePosition = sf::Mouse::getPosition(win);
+                auto worldMousePosition = win.mapPixelToCoords(mousePosition);
+
                 
                 int column = (worldMousePosition.x - TAB_X) / 56;
                 int row = 8 - (worldMousePosition.y - TAB_Y) / 56;
-
                 if (row >= 0 && row < 8 && column >= 0 && column < 8) {
-                    pieces.move_piece(row, column, 2, 2);
+                    if(pieces.board[row][column]!="" && pieces.move == pieces.board[row][column][0]){
+                        if(pieces.move == pieces.board[row][column][0]){
+                            selected_piece[0] = pieces.board[row][column];
+                            selected_piece[1] = std::to_string(row);
+                            selected_piece[2] = std::to_string(column);
+                            break;
+                        }
+                    }
+                    else if(selected_piece[0]!=""){
+                        bool isValidMove=false;
+                        int rows_ = possibles.size(); 
+                        int columns_ = (possibles.size() > 0) ? possibles[0].size() : 0; 
+                        for (const auto& possibleMove : possibles) {
+                            if (possibleMove[0] == column && possibleMove[1] == row) {
+                                isValidMove = true;
+                                break;
+                            }
+                        }
+                        if(isValidMove){
+                            pieces.move_piece(std::stoi(selected_piece[1]),std::stoi(selected_piece[2]),
+                                row, column);
+                        }
+                        selected_piece[0] = selected_piece[1] = selected_piece[2] = "";
+                    }
                 }
             }
         }
-
-
     }
 }
 
 void Window::main_looping(){
     while(win.isOpen()){
         this->allEvents();
-
         win.clear();
         this->draw();
         win.display();
     }
-    return;
 }

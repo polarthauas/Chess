@@ -8,7 +8,8 @@ include_directories(include)
 set(SOURCES
     src/main.cpp
     src/window.cpp
-    src/piece.cpp)
+    src/piece.cpp
+    src/outTab.cpp)
 
 add_executable(Chess ${SOURCES})
 target_link_libraries(Chess sfml-graphics sfml-window sfml-system)
